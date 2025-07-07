@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adam Asmaca</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+        }
+
+        .container {
+            text-align: center;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        #oyun-alani {
+            margin-top: 20px;
+        }
+
+        #kelime-alani, #mesaj {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+
+        #klavye {
+            display: flex;
+            flex-wrap: wrap;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        #klavye button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            margin: 5px;
+            padding: 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 45px;
+            height: 45px;
+        }
+
+        #klavye button:hover {
+            background-color: #45a049;
+        }
+
+        #hangman-status {
+            font-size: 30px;
+            font-weight: bold;
+            white-space: pre-wrap;
+            text-align: center;
+        }
+
+        .header-img {
+            position: absolute;
+            top: 20px;
+        }
+
+        #left-img {
+            left: 30px;
+            width: 200px;
+            height: auto;
+        }
+
+        #right-img {
+            right: 30px;
+            width: 200px;
+            height: auto;
+        }
+
+        #music-buttons {
+            margin-top: 20px;
+        }
+
+        #music-buttons button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            background-color: #f39c12;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #music-buttons button:hover {
+            background-color: #e67e22;
+        }
+    </style>
+</head>
+<body>
+    <img id="left-img" class="header-img" src="static/left-image.jpg" alt="Sol Resim">
+    <img id="right-img" class="header-img" src="static/right-image.jpg" alt="Sağ Resim">
+
+    <div class="container">
+        <h1>Adam Asmaca</h1>
+        <div id="oyun-alani">
+            <select id="kategori">
+                <option value="spor">Türk Sporcular</option>
+                <option value="sarkici">Türk Şarkıcılar</option>
+                <option value="atasozleri">Türk Atasözleri</option>
+            </select>
+            <button onclick="baslat()">Başla</button>
+            <p id="kelime-alani">Kelime görünümü burada olacak</p>
+            <p id="mesaj"></p>
+            <pre id="hangman-status"></pre>
+            <div id="klavye"></div>
+        </div>
+
+        <!-- Müzik Kontrolleri -->
+        <div id="music-buttons">
+            <button onclick="muzikCal()">Müzik Çal</button>
+            <button onclick="muzikDurdur()">Müziği Durdur</button>
+            <button onclick="siradakiMuzik()">Sonraki Müzik</button>
+        </div>
+
+        <script>
+            let secilenKelime = '';
+            let tahminler = [];
+            let yanlisTahminSayisi = 0;
+            const MAX_TAHMIN = 6;
+            let muzikListesi = ['static/muzik1.mp3', 'static/muzik2.mp3', 'static/muzik3.mp3'];
+            let suankiMuzik = 0;
+            let muzik = new Audio(muzikListesi[suankiMuzik]); // İlk müzik
+
+            function baslat() {
+                const kategori = document.getElementById('kategori').value;
+
+                // Türk harflerini de içeren 20'şer tane örnek kelimeler
+                const kelimeler = {
+                    'spor': ['naim süleymanoğlu', 'hamza yerlikaya', 'hidayet türkoğlu', 'rıza kayaalp', 'arda turan',
+                             'elvan abeylegesse', 'neslihan demir', 'taha akgül', 'mehmet okur', 'çağla büyükakçay',
+                             'semih saygıner', 'ibrahim çolak', 'emre belözoğlu', 'sibel özkan', 'burcu çetinkaya',
+                             'eda erdem', 'cengiz ünder', 'enes ünal', 'ilhan mansız', 'caner erkin'],
+                    
+                    'sarkici': ['atakan dinçer','tarkan', 'sezen aksu', 'ajda pekkan', 'barış manço', 'zeki müren',
+                                'cem karaca', 'nilüfer', 'kenan doğulu', 'sertab erener', 'mfo',
+                                'ibrahim tatlıses', 'demet akalın', 'edis', 'aleyna tilki', 'ferhat göçer',
+                                'mustafa ceceli', 'simge', 'gülşen', 'funda arar', 'levent yüksel'],
+                    
+                    'atasozleri': ['azıcık aşım kaygısız başım', 'damlaya damlaya göl olur', 'ne ekersen onu biçersin',
+                                   'acele işe şeytan karışır', 'gülme komşuna gelir başına', 'bir elin nesi var iki elin sesi var',
+                                   'dost kara günde belli olur', 'sakla samanı gelir zamanı', 'ak akçe kara gün içindir',
+                                   'iyilik eden iyilik bulur', 'komşu komşunun külüne muhtaçtır', 'taş yerinde ağırdır',
+                                   'herkes kendi evinde bey', 'sabreden derviş muradına ermiş', 'iki karpuz bir koltuğa sığmaz',
+                                   'işleyen demir ışıldar', 'yılanın başını küçükken ezeceksin', 'söz gümüşse sükut altındır',
+                                   'yuvarlanan taş yosun tutmaz', 'çivi çiviyi söker']
+                };
+
+                const secilen_kelimeler = kelimeler[kategori];
+                secilenKelime = secilen_kelimeler[Math.floor(Math.random() * secilen_kelimeler.length)];
+                document.getElementById('kelime-alani').innerText = kelimeGorunumu();
+                tahminler = [];
+                yanlisTahminSayisi = 0;
+                klavyeOlustur();
+                adamCizimGuncelle();
+            }
+
+            function kelimeGorunumu() {
+                return secilenKelime.split('').map(harf => {
+                    if (tahminler.includes(harf) || harf === ' ') {
+                        return harf === ' ' ? '/' : harf;  // Boşluklar yerine '/' işareti koy
+                    } else {
+                        return '_';
+                    }
+                }).join(' ');
+            }
+
+            function klavyeOlustur() {
+                const harfler = 'abcçdefgğhıijklmnoöprsştuüvwxyz '.split('');
+                const klavyeDiv = document.getElementById('klavye');
+                klavyeDiv.innerHTML = '';  // Eski harfleri temizle
+
+                harfler.forEach(harf => {
+                    const buton = document.createElement('button');
+                    buton.innerText = harf;
+                    buton.onclick = () => harfTahmin(harf);
+                    klavyeDiv.appendChild(buton);
+                });
+            }
+
+            function adamCizimGuncelle() {
+                const telAdamAşamaları = [
+                    ' _______\n |/      \n |      \n |      \n |      \n |      \n |      \n_|_',
+                    ' _______\n |/      \n |      O \n |      \n |      \n |      \n |      \n_|_',
+                    ' _______\n |/      \n |      O \n |      | \n |      \n |      \n |      \n_|_',
+                    ' _______\n |/      \n |      O \n |     /| \n |      \n |      \n |      \n_|_',
+                    ' _______\n |/      \n |      O \n |     /|\\ \n |      \n |      \n |      \n_|_',
+                    ' _______\n |/      \n |      O \n |     /|\\ \n |     / \n |      \n |      \n_|_',
+                    ' _______\n |/      \n |      O \n |     /|\\ \n |     / \\ \n |      \n |      \n_|_'
+                ];
+                document.getElementById('hangman-status').innerText = telAdamAşamaları[yanlisTahminSayisi];
+            }
+
+            function harfTahmin(harf) {
+                if (yanlisTahminSayisi >= MAX_TAHMIN) return;  // Eğer oyun bitmişse tahmin yapma
+
+                if (tahminler.includes(harf)) return;  // Aynı harfi tekrar tahmin etme
+
+                tahminler.push(harf);
+
+                if (!secilenKelime.includes(harf)) {
+                    yanlisTahminSayisi++;
+                    adamCizimGuncelle();
+                    if (yanlisTahminSayisi >= MAX_TAHMIN) {
+                        document.getElementById('kelime-alani').innerText = `Kelime: ${secilenKelime}`;
+                        document.getElementById('mesaj').innerText = 'Kaybettiniz!';
+                    }
+                } else {
+                    document.getElementById('kelime-alani').innerText = kelimeGorunumu();
+                    if (!kelimeGorunumu().includes('_')) {
+                        document.getElementById('mesaj').innerText = 'Kazandınız!';
+                    }
+                }
+            }
+
+            // Müzik çalma fonksiyonu
+            function muzikCal() {
+                muzik.play();
+            }
+
+            // Müzik durdurma fonksiyonu
+            function muzikDurdur() {
+                muzik.pause();
+                muzik.currentTime = 0;
+            }
+
+            // Sonraki müziğe geçme fonksiyonu
+            function siradakiMuzik() {
+                muzik.pause();
+                suankiMuzik = (suankiMuzik + 1) % muzikListesi.length;
+                muzik = new Audio(muzikListesi[suankiMuzik]);
+                muzik.play();
+            }
+        </script>
+    </div>
+</body>
+</html>
