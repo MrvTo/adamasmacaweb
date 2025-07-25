@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2775838650567097"
-     crossorigin="anonymous"></script>
+      crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adam Asmaca</title>
@@ -13,7 +13,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
             position: relative;
         }
@@ -25,82 +25,250 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             position: relative;
+            max-width: 450px;
+            width: 90%;
+            overflow: hidden; /* İçerik taşmasını engellemek için */
         }
 
+        h1 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        /* Başlangıç menüsü için stiller */
+        #main-menu {
+            padding: 20px 0;
+        }
+
+        #main-menu #kategori {
+            padding: 8px 12px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            margin-right: 5px;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23333" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 16px auto;
+            cursor: pointer;
+        }
+
+        #main-menu button {
+            background-color: #4CAF50; /* Yeşil */
+            color: white;
+            border: none;
+            margin: 5px;
+            padding: 8px 15px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        #main-menu button:hover {
+            background-color: #45a049;
+        }
+
+
+        /* Oyun alanı başlangıçta gizli olacak */
         #oyun-alani {
+            display: none; /* Başlangıçta gizli */
             margin-top: 20px;
         }
+        
+        /* Oyun başladığında görünür olacak */
+        .oyun-aktif #oyun-alani {
+            display: block;
+        }
+        /* Oyun aktifken ana menü gizlenecek */
+        .oyun-aktif #main-menu {
+            display: none;
+        }
+        /* Oyun pasifken ana menü görünecek */
+        .oyun-pasif #main-menu {
+            display: block;
+        }
+        /* Oyun pasifken oyun alanı gizlenecek */
+        .oyun-pasif #oyun-alani {
+            display: none;
+        }
+
 
         #kelime-alani, #mesaj {
-            font-size: 24px;
+            font-size: 20px;
             margin: 10px 0;
+            font-weight: bold;
+            color: #333;
+        }
+
+        #hangman-status {
+            font-family: monospace;
+            font-size: 20px;
+            font-weight: bold;
+            white-space: pre-wrap;
+            text-align: center;
+            margin: 15px auto;
+            color: #555;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #eee;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         #klavye {
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: column;
+            align-items: center;
             max-width: 400px;
-            margin: 0 auto;
+            margin: 15px auto;
+            gap: 5px;
+        }
+
+        .klavye-satir {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            width: 100%;
         }
 
         #klavye button {
-            background-color: #4CAF50;
+            background-color: #8BC34A; /* Açık Yeşil */
             color: white;
             border: none;
-            margin: 5px;
-            padding: 15px;
-            font-size: 16px;
+            padding: 8px;
+            font-size: 14px;
             border-radius: 5px;
             cursor: pointer;
-            width: 45px;
-            height: 45px;
+            font-weight: bold;
+            text-transform: uppercase;
+            flex-grow: 1;
+            max-width: 40px;
+            transition: background-color 0.2s ease-in-out;
         }
 
         #klavye button:hover {
-            background-color: #45a049;
+            background-color: #689F38;
         }
 
-        #hangman-status {
-            font-size: 30px;
-            font-weight: bold;
-            white-space: pre-wrap;
-            text-align: center;
+        #klavye button:disabled {
+            background-color: #ddd;
+            color: #888;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        #klavye button.space-button {
+            flex-grow: unset;
+            width: auto;
+            padding: 8px 30px;
+            min-width: 100px;
         }
 
         .header-img {
             position: absolute;
-            top: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 150px;
+            height: auto;
+            opacity: 1; /* Saydamlık tamamen kaldırıldı */
+            z-index: 0;
         }
 
         #left-img {
-            left: 30px;
-            width: 200px;
-            height: auto;
+            left: 20px;
         }
 
         #right-img {
-            right: 30px;
-            width: 200px;
-            height: auto;
+            right: 20px;
         }
 
         #music-buttons {
-            margin-top: 20px;
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
         #music-buttons button {
-            margin: 0 10px;
-            padding: 10px 20px;
-            background-color: #f39c12;
+            padding: 8px 15px;
+            background-color: #FF9800; /* Turuncu */
             color: white;
-            font-size: 18px;
+            font-size: 14px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
         }
 
         #music-buttons button:hover {
-            background-color: #e67e22;
+            background-color: #F57C00;
+        }
+
+        /* Tekrar Oyna butonu stili */
+        #play-again-button {
+            background-color: #3498db; /* Mavi tonu, yeşilden farklı olsun */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px; /* Mesajın altına boşluk */
+            display: none; /* Başlangıçta gizli */
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        #play-again-button:hover {
+            background-color: #2980b9;
+        }
+
+
+        /* Mobil cihazlar için düzenlemeler */
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+                width: 95%;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            #kelime-alani, #mesaj {
+                font-size: 18px;
+            }
+            #hangman-status {
+                font-size: 18px;
+            }
+            #klavye {
+                max-width: 100%;
+            }
+            #klavye button {
+                max-width: 35px;
+                font-size: 13px;
+                padding: 7px;
+            }
+            #klavye button.space-button {
+                min-width: 80px;
+                padding: 7px 20px;
+            }
+            .header-img {
+                display: none;
+            }
+            #music-buttons button {
+                font-size: 13px;
+                padding: 7px 12px;
+            }
+            #play-again-button {
+                font-size: 14px;
+                padding: 8px 15px;
+            }
         }
     </style>
 </head>
@@ -108,22 +276,25 @@
     <img id="left-img" class="header-img" src="static/left-image.jpg" alt="Sol Resim">
     <img id="right-img" class="header-img" src="static/right-image.jpg" alt="Sağ Resim">
 
-    <div class="container">
+    <div class="container oyun-pasif">
         <h1>Adam Asmaca</h1>
-        <div id="oyun-alani">
+
+        <div id="main-menu">
             <select id="kategori">
                 <option value="spor">Türk Sporcular</option>
                 <option value="sarkici">Türk Şarkıcılar</option>
                 <option value="atasozleri">Türk Atasözleri</option>
             </select>
-            <button onclick="baslat()">Başla</button>
+            <button onclick="startGame()">Başla</button>
+        </div>
+
+        <div id="oyun-alani">
             <p id="kelime-alani">Kelime görünümü burada olacak</p>
             <p id="mesaj"></p>
             <pre id="hangman-status"></pre>
-            <div id="klavye"></div>
+            <button id="play-again-button" onclick="resetGame()">Tekrar Oyna</button> <div id="klavye"></div>
         </div>
 
-        <!-- Müzik Kontrolleri -->
         <div id="music-buttons">
             <button onclick="muzikCal()">Müzik Çal</button>
             <button onclick="muzikDurdur()">Müziği Durdur</button>
@@ -137,12 +308,17 @@
             const MAX_TAHMIN = 6;
             let muzikListesi = ['static/muzik1.mp3', 'static/muzik2.mp3', 'static/muzik3.mp3'];
             let suankiMuzik = 0;
-            let muzik = new Audio(muzikListesi[suankiMuzik]); // İlk müzik
+            let muzik = new Audio(muzikListesi[suankiMuzik]);
 
-            function baslat() {
+            // Oyunu başlatan fonksiyon
+            function startGame() {
+                // Oyun alanını göster, menüyü gizle
+                document.querySelector('.container').classList.remove('oyun-pasif');
+                document.querySelector('.container').classList.add('oyun-aktif');
+                document.getElementById('play-again-button').style.display = 'none'; // Tekrar Oyna butonunu gizle
+                
                 const kategori = document.getElementById('kategori').value;
 
-                // Türk harflerini de içeren 20'şer tane örnek kelimeler
                 const kelimeler = {
                     'spor': ['naim süleymanoğlu', 'hamza yerlikaya', 'hidayet türkoğlu', 'rıza kayaalp', 'arda turan',
                              'elvan abeylegesse', 'neslihan demir', 'taha akgül', 'mehmet okur', 'çağla büyükakçay',
@@ -150,9 +326,9 @@
                              'eda erdem', 'cengiz ünder', 'enes ünal', 'ilhan mansız', 'caner erkin'],
                     
                     'sarkici': ['atakan dinçer','tarkan', 'sezen aksu', 'ajda pekkan', 'barış manço', 'zeki müren',
-                                'cem karaca', 'nilüfer', 'kenan doğulu', 'sertab erener', 'mfo',
-                                'ibrahim tatlıses', 'demet akalın', 'edis', 'aleyna tilki', 'ferhat göçer',
-                                'mustafa ceceli', 'simge', 'gülşen', 'funda arar', 'levent yüksel'],
+                                 'cem karaca', 'nilüfer', 'kenan doğulu', 'sertab erener', 'mfo',
+                                 'ibrahim tatlıses', 'demet akalın', 'edis', 'aleyna tilki', 'ferhat göçer',
+                                 'mustafa ceceli', 'simge', 'gülşen', 'funda arar', 'levent yüksel'],
                     
                     'atasozleri': ['azıcık aşım kaygısız başım', 'damlaya damlaya göl olur', 'ne ekersen onu biçersin',
                                    'acele işe şeytan karışır', 'gülme komşuna gelir başına', 'bir elin nesi var iki elin sesi var',
@@ -170,12 +346,13 @@
                 yanlisTahminSayisi = 0;
                 klavyeOlustur();
                 adamCizimGuncelle();
+                document.getElementById('mesaj').innerText = '';
             }
 
             function kelimeGorunumu() {
                 return secilenKelime.split('').map(harf => {
                     if (tahminler.includes(harf) || harf === ' ') {
-                        return harf === ' ' ? '/' : harf;  // Boşluklar yerine '/' işareti koy
+                        return harf === ' ' ? '/' : harf;
                     } else {
                         return '_';
                     }
@@ -183,35 +360,64 @@
             }
 
             function klavyeOlustur() {
-                const harfler = 'abcçdefgğhıijklmnoöprsştuüvwxyz '.split('');
+                // Türkçe QWERTY klavye düzeni
+                const harflerSirasi = [
+                    ['q', 'w', 'e', 'r', 't', 'y', 'u', 'ı', 'o', 'p', 'ğ', 'ü'],
+                    ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'ş', 'i', 'z'],
+                    ['ç', 'c', 'v', 'b', 'n', 'm', 'ö']
+                ];
+                
                 const klavyeDiv = document.getElementById('klavye');
-                klavyeDiv.innerHTML = '';  // Eski harfleri temizle
+                klavyeDiv.innerHTML = '';
 
-                harfler.forEach(harf => {
-                    const buton = document.createElement('button');
-                    buton.innerText = harf;
-                    buton.onclick = () => harfTahmin(harf);
-                    klavyeDiv.appendChild(buton);
+                harflerSirasi.forEach(sira => {
+                    const satirDiv = document.createElement('div');
+                    satirDiv.classList.add('klavye-satir');
+                    
+                    sira.forEach(harf => {
+                        const buton = document.createElement('button');
+                        buton.innerText = harf;
+                        buton.onclick = () => harfTahmin(harf);
+                        satirDiv.appendChild(buton);
+                    });
+                    klavyeDiv.appendChild(satirDiv);
                 });
+
+                // Boşluk tuşu
+                const boslukSatirDiv = document.createElement('div');
+                boslukSatirDiv.classList.add('klavye-satir');
+                const boslukButon = document.createElement('button');
+                boslukButon.innerText = 'BOŞLUK';
+                boslukButon.onclick = () => harfTahmin(' ');
+                boslukButon.classList.add('space-button');
+                boslukSatirDiv.appendChild(boslukButon);
+                klavyeDiv.appendChild(boslukSatirDiv);
             }
 
             function adamCizimGuncelle() {
                 const telAdamAşamaları = [
-                    ' _______\n |/      \n |      \n |      \n |      \n |      \n |      \n_|_',
-                    ' _______\n |/      \n |      O \n |      \n |      \n |      \n |      \n_|_',
-                    ' _______\n |/      \n |      O \n |      | \n |      \n |      \n |      \n_|_',
-                    ' _______\n |/      \n |      O \n |     /| \n |      \n |      \n |      \n_|_',
-                    ' _______\n |/      \n |      O \n |     /|\\ \n |      \n |      \n |      \n_|_',
-                    ' _______\n |/      \n |      O \n |     /|\\ \n |     / \n |      \n |      \n_|_',
-                    ' _______\n |/      \n |      O \n |     /|\\ \n |     / \\ \n |      \n |      \n_|_'
+                    ' _______\n |/      \n |       \n |       \n |       \n |       \n |       \n_|_',
+                    ' _______\n |/      \n |       O \n |       \n |       \n |       \n |       \n_|_',
+                    ' _______\n |/      \n |       O \n |       | \n |       \n |       \n |       \n_|_',
+                    ' _______\n |/      \n |       O \n |      /| \n |       \n |       \n |       \n_|_',
+                    ' _______\n |/      \n |       O \n |      /|\\ \n |       \n |       \n |       \n_|_',
+                    ' _______\n |/      \n |       O \n |      /|\\ \n |      /  \n |       \n |       \n_|_',
+                    ' _______\n |/      \n |       O \n |      /|\\ \n |      / \\ \n |       \n |       \n_|_'
                 ];
                 document.getElementById('hangman-status').innerText = telAdamAşamaları[yanlisTahminSayisi];
             }
 
             function harfTahmin(harf) {
-                if (yanlisTahminSayisi >= MAX_TAHMIN) return;  // Eğer oyun bitmişse tahmin yapma
+                const clickedButton = Array.from(document.querySelectorAll('#klavye button')).find(btn => 
+                    btn.innerText.toLowerCase() === harf.toLowerCase() || 
+                    (harf === ' ' && btn.classList.contains('space-button'))
+                );
+                if (clickedButton) {
+                    clickedButton.disabled = true;
+                }
 
-                if (tahminler.includes(harf)) return;  // Aynı harfi tekrar tahmin etme
+                if (yanlisTahminSayisi >= MAX_TAHMIN) return; 
+                if (tahminler.includes(harf)) return; 
 
                 tahminler.push(harf);
 
@@ -219,35 +425,54 @@
                     yanlisTahminSayisi++;
                     adamCizimGuncelle();
                     if (yanlisTahminSayisi >= MAX_TAHMIN) {
-                        document.getElementById('kelime-alani').innerText = `Kelime: ${secilenKelime}`;
-                        document.getElementById('mesaj').innerText = 'Kaybettiniz!';
+                        document.getElementById('kelime-alani').innerText = `Kelime: ${secilenKelime.toUpperCase()}`;
+                        document.getElementById('mesaj').innerText = 'Kaybettiniz!'; // Mesajı kısalt
+                        document.querySelectorAll('#klavye button').forEach(button => button.disabled = true);
+                        document.getElementById('play-again-button').style.display = 'block'; // Tekrar Oyna butonunu göster
                     }
                 } else {
                     document.getElementById('kelime-alani').innerText = kelimeGorunumu();
                     if (!kelimeGorunumu().includes('_')) {
-                        document.getElementById('mesaj').innerText = 'Kazandınız!';
+                        document.getElementById('mesaj').innerText = 'Tebrikler, Kazandınız!'; // Mesajı kısalt
+                        document.querySelectorAll('#klavye button').forEach(button => button.disabled = true);
+                        document.getElementById('play-again-button').style.display = 'block'; // Tekrar Oyna butonunu göster
                     }
                 }
             }
 
-            // Müzik çalma fonksiyonu
+            // Oyun bittikten sonra "Tekrar Oyna" butonuna basıldığında çağrılacak fonksiyon
+            function resetGame() {
+                // Container'dan oyun-aktif sınıfını kaldır ve oyun-pasif sınıfını ekle
+                document.querySelector('.container').classList.remove('oyun-aktif');
+                document.querySelector('.container').classList.add('oyun-pasif');
+                document.getElementById('play-again-button').style.display = 'none'; // Butonu tekrar gizle
+                // Kelime ve mesaj alanlarını temizle (isteğe bağlı)
+                document.getElementById('kelime-alani').innerText = 'Kelime görünümü burada olacak';
+                document.getElementById('mesaj').innerText = '';
+                // Adam çizimini sıfırla
+                adamCizimGuncelle(); // Bu, yanlisTahminSayisi 0 olduğu için ilk aşamayı gösterir
+            }
+
             function muzikCal() {
                 muzik.play();
             }
 
-            // Müzik durdurma fonksiyonu
             function muzikDurdur() {
                 muzik.pause();
                 muzik.currentTime = 0;
             }
 
-            // Sonraki müziğe geçme fonksiyonu
             function siradakiMuzik() {
                 muzik.pause();
                 suankiMuzik = (suankiMuzik + 1) % muzikListesi.length;
                 muzik = new Audio(muzikListesi[suankiMuzik]);
                 muzik.play();
             }
+
+            // Sayfa yüklendiğinde oyun-pasif sınıfını ekleyerek menünün görünmesini sağlar
+            document.addEventListener('DOMContentLoaded', (event) => {
+                document.querySelector('.container').classList.add('oyun-pasif');
+            });
         </script>
     </div>
 </body>
